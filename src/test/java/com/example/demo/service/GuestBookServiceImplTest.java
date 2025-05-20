@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -26,6 +27,7 @@ class GuestBookServiceImplTest extends IntegrationTestSupport {
     private String bucketName;
 
 
+    @Transactional
     @DisplayName("이름, 이미지를 입려하면, 방명록을 반환합니다.")
     @Test
     void create() {
@@ -49,7 +51,7 @@ class GuestBookServiceImplTest extends IntegrationTestSupport {
                     .extracting(GuestBookResult::name, GuestBookResult::title)
                     .containsExactlyInAnyOrder(guestName, title);
             softly.assertThat(guestBookResult.createdAt()).isNotNull();
-            softly.assertThat(guestBookResult.imageUrl().startsWith(baseUrl+imageName)).isTrue();
+            softly.assertThat(guestBookResult.imageUrl().startsWith(baseUrl + imageName)).isTrue();
         });
     }
 
