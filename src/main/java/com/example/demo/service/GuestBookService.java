@@ -12,4 +12,5 @@ public interface GuestBookService {
     PageResult<GuestBookResult> getAllIn();
 
     GuestBookResult getById(Long id);
+
 }

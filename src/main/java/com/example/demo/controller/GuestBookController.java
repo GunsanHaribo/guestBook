@@ -19,8 +19,8 @@ public class GuestBookController {
     private final GuestBookService guestBookService;
 
     @PostMapping
-    public GuestBookResult create(@RequestBody GuestBookRequest guestBookRequest, MultipartFile file) {
-        BinaryContentRequest binaryContentRequest = convertToBinaryRequest(file);
+    public GuestBookResult create(@RequestPart GuestBookRequest guestBookRequest, @RequestPart(required = false) MultipartFile image) {
+        BinaryContentRequest binaryContentRequest = convertToBinaryRequest(image);
         return guestBookService.create(guestBookRequest, binaryContentRequest);
     }
 

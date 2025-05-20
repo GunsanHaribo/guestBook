@@ -1,27 +1,42 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 public class GuestBook {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    String name;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    String title;
+    @Column(name = "title", nullable = false)
+    private String title;
 
-    String content;
+    @Column(name = "content", nullable = false)
+    private String content;
 
     @CreatedDate
-    Instant createAt;
+    private Instant createAt;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    public GuestBook(String name, String title, String content, String imageUrl) {
+        this.name = name;
+        this.title = title;
+        this.content = content;
+        this.imageUrl = imageUrl;
+    }
 
 }
