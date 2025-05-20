@@ -2,13 +2,16 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
+@Getter
 @Entity
+@Table(name = "guest_books")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class GuestBook {
@@ -27,7 +30,7 @@ public class GuestBook {
     private String content;
 
     @CreatedDate
-    private Instant createAt;
+    private Instant createdAt;
 
     @Column(name = "image_url")
     private String imageUrl;

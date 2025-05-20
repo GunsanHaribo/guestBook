@@ -8,6 +8,7 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -18,6 +19,13 @@ class GuestBookServiceImplTest extends IntegrationTestSupport {
     @Autowired
     private GuestBookService guestBookService;
 
+    @Value("${aws.base-url}")
+    private String baseUrl;
+
+    @Value("${aws.bucketName}")
+    private String bucketName;
+
+
     @DisplayName("이름, 이미지를 입려하면, 방명록을 반환합니다.")
     @Test
     void create() {
@@ -26,32 +34,23 @@ class GuestBookServiceImplTest extends IntegrationTestSupport {
         String title = UUID.randomUUID().toString();
         String content = UUID.randomUUID().toString();
         String imageName = UUID.randomUUID().toString();
-        String imageFile = UUID.randomUUID().toString();
-        InputStream inputStream = new ByteArrayInputStream(imageFile.getBytes());
+        byte[] bytes = UUID.randomUUID().toString().getBytes();
+        InputStream inputStream = new ByteArrayInputStream(bytes);
 
         GuestBookRequest guestBookRequest = new GuestBookRequest(guestName, title, content);
-        BinaryContentRequest binaryContentRequest = new BinaryContentRequest(imageName, 0, inputStream);
+        BinaryContentRequest binaryContentRequest = new BinaryContentRequest(imageName, bytes.length, inputStream);
 
         // when
         GuestBookResult guestBookResult = guestBookService.create(guestBookRequest, binaryContentRequest);
 
         // then
-        // 이게 도중에 S3에 갔다와야되는데... 이걸 흐음... 이러면 속도가 너무 느려질텐데,, 목이나 다른 방법 사용해야합니다.
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(guestBookResult)
-                    .extracting(GuestBookResult::name, GuestBookResult::title, GuestBookResult::imageUrl)
+                    .extracting(GuestBookResult::name, GuestBookResult::title)
                     .containsExactlyInAnyOrder(guestName, title);
             softly.assertThat(guestBookResult.createdAt()).isNotNull();
+            softly.assertThat(guestBookResult.imageUrl().startsWith(baseUrl+imageName)).isTrue();
         });
     }
-
-//    {
-//        "id": "방명록ID",
-//            "name": "작성자 이름",
-//            "title": "방명록 제목",
-//            "content": "방명록 내용",
-//            "imageUrl": "이미지URL 또는 null",
-//            "createdAt": "생성일시"
-//    }
 
 }

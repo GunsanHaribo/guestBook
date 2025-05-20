@@ -1,5 +1,7 @@
 package com.example.demo.dto;
 
+import com.example.demo.entity.GuestBook;
+
 import java.time.Instant;
 
 public record GuestBookResult(
@@ -10,4 +12,16 @@ public record GuestBookResult(
         String imageUrl,
         Instant createdAt
 ) {
+
+    public static GuestBookResult from(GuestBook guestBook) {
+        return new GuestBookResult(
+                guestBook.getId(),
+                guestBook.getName(),
+                guestBook.getTitle(),
+                guestBook.getContent(),
+                guestBook.getImageUrl(),
+                guestBook.getCreatedAt()
+        );
+    }
+
 }

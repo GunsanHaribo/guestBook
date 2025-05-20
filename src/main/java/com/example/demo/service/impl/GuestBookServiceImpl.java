@@ -17,15 +17,12 @@ public class GuestBookServiceImpl implements GuestBookService {
 
     @Override
     public GuestBookResult create(GuestBookRequest guestBookRequest, BinaryContentRequest binaryContentRequest) {
-        // 일단 S3에 저장을 합니다.
         BinaryContent binaryContent = binaryContentStorageService.create(binaryContentRequest);
 
-        //        new GuestBook();
-//        guestBookRepository.save();
+        GuestBook guestBook = new GuestBook(guestBookRequest.name(), guestBookRequest.title(), guestBookRequest.content(), binaryContent.imageUrl());
+        GuestBook savedGuestBook = guestBookRepository.save(guestBook);
 
-        //
-
-        return null;
+        return GuestBookResult.from(savedGuestBook);
     }
 
     @Override
