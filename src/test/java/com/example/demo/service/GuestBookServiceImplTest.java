@@ -9,6 +9,7 @@ import com.example.demo.dto.result.GuestBookResult;
 import com.example.demo.dto.result.PageResult;
 import com.example.demo.entity.GuestBook;
 import com.example.demo.repository.GuestBookRepository;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,7 @@ class GuestBookServiceImplTest extends IntegrationTestSupport {
     @MockitoBean
     private BinaryContentStorageService binaryContentStorageService;
 
+    // null이 나왔을떄는 검증해야한다.
     @Transactional
     @DisplayName("이름, 이미지를 입력하면, 방명록을 반환합니다.")
     @Test
@@ -94,6 +96,31 @@ class GuestBookServiceImplTest extends IntegrationTestSupport {
                     .extracting(GuestBookResult::id)
                     .containsExactlyInAnyOrder(guestBook2.getId());
         });
+    }
+
+    @Transactional
+    @DisplayName("ID로 조회하면, 해당 방명록을 반환합니다.")
+    @Test
+    void getById() {
+        // given
+        String name = UUID.randomUUID().toString();
+        GuestBook savedGuestBook = guestBookRepository.save(new GuestBook(name, "", "", ""));
+
+        // when
+        GuestBookResult guestBook = sut.getById(savedGuestBook.getId());
+
+        // then
+        Assertions.assertThat(guestBook)
+                .extracting(GuestBookResult::id, GuestBookResult::name)
+                .containsExactlyInAnyOrder(savedGuestBook.getId(), name);
+    }
+
+    @DisplayName("ID 조회시 해당 방명록이 없다면, 예외를 반환합니다.")
+    @Test
+    void test() {
+        // when & then
+        Assertions.assertThatThrownBy(() -> sut.getById(-1L))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
 }

@@ -43,9 +43,13 @@ public class GuestBookServiceImpl implements GuestBookService {
         return PageResult.from(guestBooks, GuestBookResult::from);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public GuestBookResult getById(Long id) {
-        return null;
+        GuestBook guestBook = guestBookRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 객체가 없습니다."));
+
+        return GuestBookResult.from(guestBook);
     }
 
 }
