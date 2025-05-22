@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.IntegrationTestSupport;
+import com.example.demo.dto.BinaryContent;
 import com.example.demo.dto.request.BinaryContentRequest;
 import com.example.demo.dto.request.GuestBookCreateRequest;
 import com.example.demo.dto.request.GuestBookPageRequest;
@@ -11,14 +12,18 @@ import com.example.demo.repository.GuestBookRepository;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.UUID;
+
+import static org.mockito.ArgumentMatchers.any;
 
 class GuestBookServiceImplTest extends IntegrationTestSupport {
 
@@ -31,10 +36,10 @@ class GuestBookServiceImplTest extends IntegrationTestSupport {
     @Value("${aws.base-url}")
     private String baseUrl;
 
-    // 여기서는 차라리 모킹을 하자 // 분리를 시킨다음에 모킹을 하는게 좋을 듯
-//    @Transactional
-//    @Column(name = "contents", nullable = false)
-//    private String content; -> 이거일떄 Transactional을 붙이면 왜 테스트가 성공하지?
+    @MockitoBean
+    private BinaryContentStorageService binaryContentStorageService;
+
+    @Transactional
     @DisplayName("이름, 이미지를 입력하면, 방명록을 반환합니다.")
     @Test
     void create() {
@@ -48,6 +53,12 @@ class GuestBookServiceImplTest extends IntegrationTestSupport {
 
         GuestBookCreateRequest guestBookCreateRequest = new GuestBookCreateRequest(guestName, title, content);
         BinaryContentRequest binaryContentRequest = new BinaryContentRequest(imageName, bytes.length, inputStream);
+        UUID random = UUID.randomUUID();
+        String key = binaryContentRequest.name() + random;
+        String url = baseUrl + key;
+        BinaryContent binaryContent = new BinaryContent(url);
+        BDDMockito.given(binaryContentStorageService.create(any()))
+                .willReturn(binaryContent);
 
         // when
         GuestBookResult guestBookResult = sut.create(guestBookCreateRequest, binaryContentRequest);
@@ -58,7 +69,7 @@ class GuestBookServiceImplTest extends IntegrationTestSupport {
                     .extracting(GuestBookResult::name, GuestBookResult::title)
                     .containsExactlyInAnyOrder(guestName, title);
             softly.assertThat(guestBookResult.createdAt()).isNotNull();
-            softly.assertThat(guestBookResult.imageUrl().startsWith(baseUrl + imageName)).isTrue();
+            softly.assertThat(guestBookResult.imageUrl()).isEqualTo(url);
         });
     }
 
