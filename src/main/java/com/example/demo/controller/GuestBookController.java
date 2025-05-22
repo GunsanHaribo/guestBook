@@ -1,11 +1,15 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.BinaryContentRequest;
-import com.example.demo.dto.GuestBookRequest;
-import com.example.demo.dto.GuestBookResult;
-import com.example.demo.dto.PageResult;
+import com.example.demo.dto.request.BinaryContentRequest;
+import com.example.demo.dto.request.GuestBookCreateRequest;
+import com.example.demo.dto.request.GuestBookPageRequest;
+import com.example.demo.dto.result.GuestBookResult;
+import com.example.demo.dto.result.PageResult;
 import com.example.demo.service.GuestBookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,14 +23,22 @@ public class GuestBookController {
     private final GuestBookService guestBookService;
 
     @PostMapping
-    public GuestBookResult create(@RequestPart GuestBookRequest guestBookRequest, @RequestPart(required = false) MultipartFile image) {
+    public GuestBookResult create(@RequestPart GuestBookCreateRequest guestBookCreateRequest, @RequestPart(required = false) MultipartFile image) {
         BinaryContentRequest binaryContentRequest = convertToBinaryRequest(image);
-        return guestBookService.create(guestBookRequest, binaryContentRequest);
+        return guestBookService.create(guestBookCreateRequest, binaryContentRequest);
     }
 
     @GetMapping
-    public PageResult<GuestBookResult> getAllIn() {
-        return guestBookService.getAllIn();
+    public PageResult<GuestBookResult> getAllIn(
+            @PageableDefault(
+                    size = 5,
+                    page = 0,
+                    sort = "createdAt",
+                    direction = Sort.Direction.DESC
+            ) Pageable pageable
+    ) {
+        GuestBookPageRequest guestBookPageRequest = GuestBookPageRequest.from(pageable);
+        return guestBookService.getAllIn(guestBookPageRequest);
     }
 
     @GetMapping("/{id}")

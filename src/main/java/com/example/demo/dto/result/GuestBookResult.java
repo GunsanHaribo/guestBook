@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.dto.result;
 
 import com.example.demo.entity.GuestBook;
 

@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.IntegrationTestSupport;
 import com.example.demo.dto.BinaryContent;
-import com.example.demo.dto.BinaryContentRequest;
+import com.example.demo.dto.request.BinaryContentRequest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,6 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.UUID;
 
 class BinaryContentStorageServiceTest extends IntegrationTestSupport {
 

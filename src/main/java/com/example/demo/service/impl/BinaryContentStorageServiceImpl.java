@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.dto.BinaryContent;
-import com.example.demo.dto.BinaryContentRequest;
+import com.example.demo.dto.request.BinaryContentRequest;
 import com.example.demo.service.BinaryContentStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
