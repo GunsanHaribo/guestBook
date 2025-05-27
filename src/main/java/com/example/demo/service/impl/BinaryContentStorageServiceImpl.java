@@ -36,7 +36,6 @@ public class BinaryContentStorageServiceImpl implements BinaryContentStorageServ
                 .contentType("image/jpeg")
                 .build();
 
-        // 이게왜 빨간줄뜨는데 이유가뭐지
         RequestBody requestBody = RequestBody.fromInputStream(binaryContentRequest.inputStream(), binaryContentRequest.size());
         s3Client.putObject(putObjectRequest, requestBody);
 

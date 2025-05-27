@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,13 +24,23 @@ public class GuestBookController {
     private final GuestBookService guestBookService;
 
     @PostMapping
-    public GuestBookResult create(@RequestPart GuestBookCreateRequest guestBookCreateRequest, @RequestPart(required = false) MultipartFile image) {
+    public ResponseEntity<GuestBookResult> create(
+
+            @RequestPart(name = "name") String name,
+            @RequestPart(name = "title") String title,
+            @RequestPart(name = "content") String content,
+            @RequestPart(name = "image", required = false) MultipartFile image
+    ) {
+        // null일때 손봐야된다.
         BinaryContentRequest binaryContentRequest = convertToBinaryRequest(image);
-        return guestBookService.create(guestBookCreateRequest, binaryContentRequest);
+        GuestBookCreateRequest guestBookCreateRequest = new GuestBookCreateRequest(name, title, content);
+        GuestBookResult guestBookResult = guestBookService.create(guestBookCreateRequest, binaryContentRequest);
+
+        return ResponseEntity.ok(guestBookResult);
     }
 
     @GetMapping
-    public PageResult<GuestBookResult> getAllIn(
+    public ResponseEntity<PageResult<GuestBookResult>> getAllIn(
             @PageableDefault(
                     size = 5,
                     page = 0,
@@ -38,12 +49,16 @@ public class GuestBookController {
             ) Pageable pageable
     ) {
         GuestBookPageRequest guestBookPageRequest = GuestBookPageRequest.from(pageable);
-        return guestBookService.getAllIn(guestBookPageRequest);
+        PageResult<GuestBookResult> guestBookResultPageResult = guestBookService.getAllIn(guestBookPageRequest);
+
+        return ResponseEntity.ok(guestBookResultPageResult);
     }
 
     @GetMapping("/{id}")
-    public GuestBookResult getById(@PathVariable(name = "id") Long id) {
-        return guestBookService.getById(id);
+    public ResponseEntity<GuestBookResult> getById(@PathVariable(name = "id") Long id) {
+        GuestBookResult guestBookResult = guestBookService.getById(id);
+
+        return ResponseEntity.ok(guestBookResult);
     }
 
     private BinaryContentRequest convertToBinaryRequest(MultipartFile multipartFile) {

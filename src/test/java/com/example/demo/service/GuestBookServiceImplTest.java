@@ -40,7 +40,6 @@ class GuestBookServiceImplTest extends IntegrationTestSupport {
     @MockitoBean
     private BinaryContentStorageService binaryContentStorageService;
 
-    // null이 나왔을떄는 검증해야한다.
     @Transactional
     @DisplayName("이름, 이미지를 입력하면, 방명록을 반환합니다.")
     @Test

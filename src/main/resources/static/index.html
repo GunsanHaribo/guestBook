@@ -219,7 +219,7 @@
                     // 페이지네이션 표시
                     displayPagination();
                 })
-                .catch(error => {
+                .catch(error => { // 왜 여기서 에러가 나오지 아니 페이지가 잘 나오는데
                     console.error('Error fetching guestbooks:', error);
                     guestbooksContainer.innerHTML = '<div class="loading">방명록을 불러오는데 실패했습니다.</div>';
                 });
