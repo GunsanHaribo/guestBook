@@ -8,6 +8,9 @@ on:
 jobs:
   test-aws-connection:
     runs-on: ubuntu-latest
+    env:
+      SPRING_PROFILES_ACTIVE: test
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -18,7 +21,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build with Gradle
+      - name: Run tests
         run: |
           chmod +x ./gradlew
           ./gradlew test
