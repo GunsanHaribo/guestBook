@@ -40,10 +40,15 @@ class GuestBookServiceImplTest extends IntegrationTestSupport {
     @MockitoBean
     private BinaryContentStorageService binaryContentStorageService;
 
+    @Value("${spring.datasource.url}")
+    String url;
+
     @Transactional
     @DisplayName("이름, 이미지를 입력하면, 방명록을 반환합니다.")
     @Test
     void create() {
+        System.out.println("🔍 연결된 DB URL: " + url);
+
         // given
         String guestName = UUID.randomUUID().toString();
         String title = UUID.randomUUID().toString();
