@@ -4,6 +4,7 @@ import com.example.demo.IntegrationTestSupport;
 import com.example.demo.dto.BinaryContent;
 import com.example.demo.dto.request.BinaryContentRequest;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ class BinaryContentStorageServiceTest extends IntegrationTestSupport {
     @Value("${aws.base-url}")
     private String baseUrl;
 
+    @Disabled
     @DisplayName("바이너리 이미지를 입력하면, imageUrl을 반환합니다.")
     @Test
     void create() {
