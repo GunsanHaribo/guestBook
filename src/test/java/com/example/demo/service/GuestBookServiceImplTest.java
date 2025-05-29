@@ -43,11 +43,6 @@ class GuestBookServiceImplTest extends IntegrationTestSupport {
     @Value("${spring.datasource.url}")
     String url;
 
-    @Test
-    void printDatasourceUrl() {
-        System.out.println("🔍 실제 연결된 DB URL: " + url);
-    }
-
     @Transactional
     @DisplayName("이름, 이미지를 입력하면, 방명록을 반환합니다.")
     @Test
