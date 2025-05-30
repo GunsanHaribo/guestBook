@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - main
-
+env:
+  SPRING_PROFILES_ACTIVE: test # 필수
 jobs:
   test-aws-connection:
     runs-on: ubuntu-latest
