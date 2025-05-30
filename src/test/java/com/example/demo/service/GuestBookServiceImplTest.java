@@ -34,14 +34,8 @@ class GuestBookServiceImplTest extends IntegrationTestSupport {
     @Autowired
     private GuestBookService sut;
 
-    @Value("${aws.base-url}")
-    private String baseUrl;
-
     @MockitoBean
     private BinaryContentStorageService binaryContentStorageService;
-
-    @Value("${spring.datasource.url}")
-    String url;
 
     @Transactional
     @DisplayName("이름, 이미지를 입력하면, 방명록을 반환합니다.")
@@ -59,7 +53,7 @@ class GuestBookServiceImplTest extends IntegrationTestSupport {
         BinaryContentRequest binaryContentRequest = new BinaryContentRequest(imageName, bytes.length, inputStream);
         UUID random = UUID.randomUUID();
         String key = binaryContentRequest.name() + random;
-        String url = baseUrl + key;
+        String url = UUID.randomUUID() + key;
         BinaryContent binaryContent = new BinaryContent(url);
         BDDMockito.given(binaryContentStorageService.create(any()))
                 .willReturn(binaryContent);

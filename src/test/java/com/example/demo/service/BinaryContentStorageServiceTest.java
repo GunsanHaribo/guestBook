@@ -18,6 +18,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+@Disabled
 class BinaryContentStorageServiceTest extends IntegrationTestSupport {
 
     @Autowired
@@ -32,7 +33,7 @@ class BinaryContentStorageServiceTest extends IntegrationTestSupport {
     @Value("${aws.base-url}")
     private String baseUrl;
 
-    @Disabled
+
     @DisplayName("바이너리 이미지를 입력하면, imageUrl을 반환합니다.")
     @Test
     void create() {

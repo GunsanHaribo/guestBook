@@ -28,6 +28,5 @@ logging:
       springframework:
         data: DEBUG
     com:
-      sprint:
-        mission:
-          discodeit: DEBUG
+      example:
+        demo: DEBUG
