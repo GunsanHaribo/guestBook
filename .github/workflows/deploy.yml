@@ -1,5 +1,6 @@
 name: App deploy
 
+# _ 임
 on:
   workflow_dispatch:
 
@@ -14,7 +15,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'termurin'
+          distribution: 'temurin'
 
       - name: Build with Gradle
         run: |
