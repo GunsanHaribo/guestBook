@@ -1,7 +1,7 @@
 name: App deploy
 
 on:
-  workflow-dispatch:
+  workflow_dispatch:
 
 jobs:
   test-aws-connection:
