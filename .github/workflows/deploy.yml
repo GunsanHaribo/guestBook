@@ -49,7 +49,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_DEPLOY_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_REGION }}
 
-      ## ecr에 로그인
+      ## ecr에 로그인 #private이면 권한 설정이 또 필요합니다.
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
@@ -77,12 +77,13 @@ jobs:
           aws ecs describe-task-definition --task-definition guest-book --query taskDefinition > task-definition.json
 
       # 새로운 task-definition 생성
+      # 여기서 문제가 생깁니다.
       - name: Update task definition with new image
         id : render-task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-definition.json
-          container-name: app
+          container-name: guestbook
           image: ${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
 #          environment-variables: |
 #            SPRING_PROFILES_ACTIVE=dev
