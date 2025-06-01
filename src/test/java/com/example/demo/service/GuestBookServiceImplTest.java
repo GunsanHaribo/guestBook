@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.IntegrationTestSupport;
+import com.example.demo.config.S3Config;
 import com.example.demo.dto.BinaryContent;
 import com.example.demo.dto.request.BinaryContentRequest;
 import com.example.demo.dto.request.GuestBookCreateRequest;
@@ -15,7 +16,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +26,11 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 
+// 의존성이 따로 있어서 터졌네, 환경변수에서
 class GuestBookServiceImplTest extends IntegrationTestSupport {
+
+    @MockitoBean
+    S3Config s3Config;
 
     @Autowired
     private GuestBookRepository guestBookRepository;

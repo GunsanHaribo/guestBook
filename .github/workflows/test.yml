@@ -12,7 +12,7 @@ jobs:
       SPRING_PROFILES_ACTIVE: test
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3  #여기서 빌드하는 부분이 있나? 테스트만 돌리면 안되나?
+        uses: actions/checkout@v3
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
