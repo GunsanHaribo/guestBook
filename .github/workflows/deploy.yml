@@ -22,8 +22,10 @@ jobs:
           chmod +x ./gradlew
           ./gradlew test
 
+      ### 도터 이미지를 빌드합니다.
+      ### fm-app
       - name: Build Docker image
-        run: docker build -t fm-app:lastest .
+        run: docker build -t fm-app:latest .
 
       ## ECR이랑 이미지 형식 지정
       ## ECR 주소
